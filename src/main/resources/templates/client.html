@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="https://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="/client/creer" method="post">
+    <label for="id">Identifient</label>
+    <input id="id" name="id" type="text" required>
+    <br>
+    <label for="nom">Client</label>
+    <input id="nom" name="nom" type="text">
+    <br>
+    <label for="prenom">Solde</label>
+    <input id="prenom" name="prenom" type="text">
+    <br>
+    <input type="submit" value="Créer">
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Nom</th>
+        <th>Prenom</th>
+        <th>Supprimer</th>
+        <th>Détail</th>
+        <th>Editer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="client : ${clients}">
+        <td th:text="${client.id}"></td>
+        <td th:text="${client.nom}"></td>
+        <td th:text="${client.prenom}"></td>
+        <td>
+          <form action="/client/effacer" method="post">
+            <input type="hidden" name="idClient" th:value="${client.id}">
+            <input type="submit" value="Supprimer">
+          </form>
+        </td>
+        <td><a th:href="'/client/lister/' + ${client.id}">Détail</a></td>
+        <td>
+          <form action="/client/editer" method="post">
+            <label for="nom-edit">Client</label>
+            <input id="nom-edit" name="nom" type="text" th:value="${client.nom}">
+            <br>
+            <label for="prenom-edit">Solde</label>
+            <input id="prenom-edit" name="prenom" type="text" th:value="${client.prenom}">
+            <br>
+            <input type="submit" value="Editer">
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

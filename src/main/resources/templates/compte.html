@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="https://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="/compte/creer" method="post">
+    <label for="id">Identifiant</label>
+    <input id="id" name="id" type="text" required>
+    <br>
+    <label for="client">Client</label>
+    <input id="client" name="client" type="text" required>
+    <br>
+    <label for="solde">Solde</label>
+    <input id="solde" name="solde" type="number" required>
+    <br>
+    <input type="submit" value="Créer">
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Client</th>
+        <th>Solde</th>
+        <th>Supprimer</th>
+        <th>Détails</th>
+        <th>Editer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="compte : ${comptes}">
+        <td th:text="${compte.id}"></td>
+        <td th:text="${compte.client}"></td>
+        <td th:text="${compte.solde}"></td>
+        <td>
+          <form action="/compte/effacer" method="post">
+            <input type="hidden" name="idCompte" th:value="${compte.id}">
+            <input type="submit" value="Supprimer">
+          </form>
+        </td>
+        <td><a th:href="'/compte/lister/' + ${compte.id}">Détail</a></td>
+        <td>
+          <form action="/compte/editer" method="post">
+            <label for="client-edit">Client</label>
+            <input id="client-edit" name="client" type="text" required  th:value="${compte.client}">
+            <br>
+            <label for="solde-edit">Solde</label>
+            <input id="solde-edit" name="solde" type="number" required  th:value="${compte.solde}">
+            <br>
+            <input type="submit" value="Créer">
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

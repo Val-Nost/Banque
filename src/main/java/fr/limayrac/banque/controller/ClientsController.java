@@ -1,37 +1,45 @@
 package fr.limayrac.banque.controller;
 
+import fr.limayrac.banque.model.Client;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/client")
 public class ClientsController {
     @GetMapping("/lister")
     public String lister(Model model) {
-        // TODO
-        return "";
+        List<Client> clients = new ArrayList<>();
+        Client client = new Client();
+        client.setId(1);
+        client.setNom("Doe");
+        client.setPrenom("John");
+        clients.add(client);
+        model.addAttribute("clients", clients);
+        return "client";
     }
     @GetMapping("/lister/{n}")
     public String lister(Model model, @PathVariable("n") Integer idClient) {
         // TODO
-        return "";
+        return "client";
     }
-    @GetMapping("/creer")
-    public String creer(Model model) {
+    @PostMapping("/creer")
+    public String creer(Model model, Client client) {
         // TODO
-        return "";
+        return "client";
     }
-    @GetMapping("/editer")
-    public String editer(Model model) {
+    @PostMapping("/editer")
+    public String editer(Model model, Client client) {
         // TODO
-        return "";
+        return "client";
     }
-    @GetMapping("/effacer")
-    public String effacer(Model model) {
+    @PostMapping("/effacer")
+    public String effacer(Model model, @RequestParam("idClient") Integer id) {
         // TODO
-        return "";
+        return "client";
     }
 }
