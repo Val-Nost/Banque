@@ -1,58 +1,57 @@
 package fr.limayrac.banque.controller;
 
+import fr.limayrac.banque.model.Client;
 import fr.limayrac.banque.model.Compte;
+import fr.limayrac.banque.service.IClientService;
+import fr.limayrac.banque.service.ICompteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/compte")
 public class ComptesController {
+    @Autowired
+    private IClientService clientService;
+    @Autowired
+    private ICompteService compteService;
+    @ModelAttribute("compte")
+    public Compte compte() {
+        return new Compte();
+    }
+    @ModelAttribute("clients")
+    private Iterable<Client> clients() {
+        return clientService.findAll();
+    }
     @GetMapping("/lister")
-    public String lister(Model model) {
-        List<Compte> comptes = new ArrayList<>();
-
-        Compte compte = new Compte();
-        compte.setId(1);
-        compte.setClient("Compte1");
-        compte.setSolde(1000);
-        comptes.add(compte);
-
-        compte = new Compte();
-        compte.setId(2);
-        compte.setClient("Compte2");
-        compte.setSolde(500);
-        comptes.add(compte);
-
-        model.addAttribute("comptes", comptes);
-        return "compte";
+    public ModelAndView lister() {
+        return new ModelAndView("compte", "comptes", compteService.findAll());
     }
     @GetMapping("/lister/{n}")
-    public String lister(Model model, @PathVariable("n") Integer idCompte) {
-        // TODO
-        return "compte";
+    public ModelAndView lister(@PathVariable Integer n) {
+        Optional<Compte> compte = compteService.findById(n);
+        return new ModelAndView("detailCompte", "compte", compte.orElse(null));
     }
     @PostMapping("/creer")
-    public String creer(Model model, Compte compte) {
-        List<Compte> comptes = (List<Compte>) model.getAttribute("comptes");
-        comptes.add(compte);
-        return "compte";
+    public String creer(@ModelAttribute("compte") Compte compte) {
+        compteService.save(compte);
+        return "redirect:/compte/lister";
     }
     @PostMapping("/editer")
-    public String editer(Model model, Compte compte) {
-        return "compte";
+    public ModelAndView editer(Compte compte) {
+        return new ModelAndView("modifierCompte", "compte", compte);
+    }
+    @PostMapping("/editer/submit")
+    public String submit(Compte compte) {
+        compteService.save(compte);
+        return "redirect:/compte/lister";
     }
     @PostMapping("/effacer")
-    public String effacer(Model model, @RequestParam("idCompte") Integer id) {
-        if (model.getAttribute("comptes") instanceof List<?>) {
-            List<Compte> comptes = (List<Compte>) model.getAttribute("comptes");
-            assert comptes != null;
-            comptes.removeIf(compte -> Objects.equals(compte.getId(), id));
-        }
-        return "compte";
+    public String effacer(@RequestParam("idCompte") Integer id) {
+        compteService.delete(id);
+        return "redirect:/compte/lister";
     }
 }

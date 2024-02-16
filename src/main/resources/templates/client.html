@@ -5,15 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-  <form action="/client/creer" method="post">
-    <label for="id">Identifient</label>
-    <input id="id" name="id" type="text" required>
+  <form action="/client/creer" method="post" th:object="${client}">
+    <label for="nom">Nom</label>
+    <input id="nom" name="nom" th:field="*{nom}" type="text">
     <br>
-    <label for="nom">Client</label>
-    <input id="nom" name="nom" type="text">
-    <br>
-    <label for="prenom">Solde</label>
-    <input id="prenom" name="prenom" type="text">
+    <label for="prenom">Prénom</label>
+    <input id="prenom" name="prenom" th:field="*{prenom}" type="text">
     <br>
     <input type="submit" value="Créer">
   </form>
@@ -42,17 +39,62 @@
         <td><a th:href="'/client/lister/' + ${client.id}">Détail</a></td>
         <td>
           <form action="/client/editer" method="post">
-            <label for="nom-edit">Client</label>
-            <input id="nom-edit" name="nom" type="text" th:value="${client.nom}">
-            <br>
-            <label for="prenom-edit">Solde</label>
-            <input id="prenom-edit" name="prenom" type="text" th:value="${client.prenom}">
-            <br>
+            <input id="id-edit" name="id" type="hidden" th:value="${client.id}">
+            <input id="nom-edit" name="nom" type="hidden" th:value="${client.nom}">
+            <input id="prenom-edit" name="prenom" type="hidden" th:value="${client.prenom}">
             <input type="submit" value="Editer">
           </form>
         </td>
       </tr>
     </tbody>
   </table>
+<!--  <script type="text/babel">-->
+<!--    Vue.component('player-card', {-->
+<!--      props: ['player'],-->
+<!--      template: `<div class="card">-->
+<!--        <div class="card-body">-->
+<!--            <h6 class="card-title">-->
+<!--                {{ player.name }}-->
+<!--            </h6>-->
+<!--          <p class="card-text">-->
+<!--            {{ player.description }}-->
+<!--          </p>-->
+<!--        </div>-->
+<!--        </div>`-->
+<!--    });-->
+
+<!--    var app = new Vue({-->
+<!--      el: '#contents',-->
+<!--      data: {-->
+<!--        players: [-->
+<!--          { id: "1",-->
+<!--            name: "Lionel Messi",-->
+<!--            description: "Argentina's superstar" },-->
+<!--          { id: "2",-->
+<!--            name: "Christiano Ronaldo",-->
+<!--            description: "World #1-ranked player from Portugal" }-->
+<!--        ]-->
+<!--      }-->
+<!--    });-->
+<!--  </script>-->
+
+<!--  <div id="contents">-->
+<!--    <ul>-->
+<!--      <li style="list-style-type:none" v-for="player in players">-->
+<!--        <player-card-->
+<!--                v-bind:player="player"-->
+<!--                v-bind:key="player.id">-->
+<!--        </player-card>-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--  </div>-->
+
+
+<!--  <script-->
+<!--          src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js">-->
+<!--  </script>-->
+<!--  <script-->
+<!--          src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js">-->
+<!--  </script>-->
 </body>
 </html>
