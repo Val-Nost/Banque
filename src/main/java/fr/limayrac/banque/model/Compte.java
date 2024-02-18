@@ -1,5 +1,6 @@
 package fr.limayrac.banque.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +14,6 @@ public class Compte {
     private Integer solde;
     private Double taux;
     @ManyToOne
+    @JsonBackReference
     private Client client;
 }

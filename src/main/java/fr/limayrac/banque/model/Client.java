@@ -1,5 +1,6 @@
 package fr.limayrac.banque.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,6 @@ public class Client {
     private String nom;
     private String prenom;
     @OneToMany(mappedBy = "client")
+    @JsonManagedReference
     private List<Compte> comptes;
 }
