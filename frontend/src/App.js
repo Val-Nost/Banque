@@ -1,31 +1,36 @@
-import logo from './logo.svg';
+import {Component} from "react";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Client from "./Client";
+import Menu from "./Menu";
+import Home from "./Home";
 import './App.css';
 
-function App() {
+class App extends Component {
+  state = {
+    clients: []
+  };
 
-  return (
-    <div className="App">
-      <MyButton/>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-function MyButton() {
-  return (
-      <button>I'm a button</button>
-  );
+  async componentDidMount() {
+    const response = await fetch('api/client/lister');
+    const body = await response.json();
+    this.setState({clients: body});
+  }
+
+  render() {
+    return (
+        <div className="App">
+          <header className="App-header">
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Menu />}>
+                  <Route index element={<Home />} />
+                  <Route path="liste-client" element={<Client />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </header>
+        </div>
+    );
+  }
 }
 export default App;
