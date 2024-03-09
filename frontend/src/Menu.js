@@ -13,6 +13,9 @@ const Menu = () => {
                 <li>
                     <Link to="/liste-compte">Compte</Link>
                 </li>
+                <li>
+                    <Link to="/virement-inter-client">Virement clients</Link>
+                </li>
             </nav>
 
             <Outlet />

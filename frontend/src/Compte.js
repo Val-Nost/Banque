@@ -12,37 +12,37 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import DialogClient from "./DialogClient";
+import DialogCompte from "./DialogCompte";
 import {Link} from "react-router-dom";
 
-function Client() {
-    const [clients, setClients] = useState([])
-    const [clientSelected, setClientSelected] = useState({})
+function Compte() {
+    const [comptes, setComptes] = useState([])
+    const [compteSelected, setCompteSelected] = useState({})
     const [open, setOpen] = useState(false)
 
+
     useEffect(() => {
-        fetch('api/client/lister')
+        fetch('api/compte/lister')
             .then(response => response.json())
-            .then(data => setClients(data))
+            .then(data => setComptes(data))
     }, [])
 
     // init();
-    const handleClickOpen = (client) => {
-        setClientSelected(client)
+    const handleClickOpen = (compte) => {
+        setCompteSelected(compte)
         setOpen(true)
     };
     const handleClose = () => {
         setOpen(false)
     };
 
-    function handleClientSubmit(event)  {
-        fetch('api/client', {
+    function handleCompteSubmit(event)  {
+        fetch('api/compte', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                nom: event.target.elements.nom.value,
-                prenom: event.target.elements.prenom.value,
-                decouvert: event.target.elements.decouvert.value
+                nom: event.target.elements.solde.value,
+                prenom: event.target.elements.taux.value
             })
         })
             .then(response => response.json())
@@ -53,27 +53,25 @@ function Client() {
         let requestOptions= {
             method: 'DELETE'
         };
-        fetch('api/client/effacer/' + id, requestOptions)
+        fetch('api/compte/effacer/' + id, requestOptions)
             .then(() => {window.location.reload()});
     }
     return (
         <>
             <div className="App">
                 <header className="App-header">
-                    <Typography variant="h2">Liste des clients</Typography>
+                    <Typography variant="h2">Liste des comptes</Typography>
                 </header>
-                <DialogClient open={open} onClose={handleClose}
-                              id={clientSelected?.id}
-                              nom={clientSelected?.nom}
-                              prenom={clientSelected?.prenom}
-                              decouvert={clientSelected?.decouvert}
-                              comptes={clientSelected?.comptes}/>
+                <DialogCompte open={open} onClose={handleClose}
+                              id={compteSelected?.id}
+                              solde={compteSelected?.solde}
+                              taux={compteSelected?.taux}
+                              comptes={compteSelected?.comptes}/>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <form onSubmit={handleClientSubmit}>
-                            <TextField size="small" label="Nom" id="nom" name="nom" type="text" required/>
-                            <TextField size="small" label="Prénom" id="prenom" name="prenom" type="text" required/>
-                            <TextField size="small" label="Découvert" id="decouvert" name="decouvert" type="text" required/>
+                        <form onSubmit={handleCompteSubmit}>
+                            <TextField size="small" label="Solde" id="solde" name="solde" type="text" required/>
+                            <TextField size="small" label="Taux" id="taux" name="taux" type="text" required/>
                             <Button variant='contained' type="submit">Créer</Button>
                         </form>
                     </Grid>
@@ -82,24 +80,22 @@ function Client() {
                             <Table sx={{minWidth: 650}} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Nom</TableCell>
-                                        <TableCell>Prénom</TableCell>
-                                        <TableCell>Découvert</TableCell>
+                                        <TableCell>Solde</TableCell>
+                                        <TableCell>Taux</TableCell>
                                         <TableCell>Détail</TableCell>
                                         <TableCell>Modifier</TableCell>
                                         <TableCell>Supprimer</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {clients.map((row) => (
+                                    {comptes.map((row) => (
                                         <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                            <TableCell>{row.nom}</TableCell>
-                                            <TableCell>{row.prenom}</TableCell>
-                                            <TableCell>{row.decouvert}</TableCell>
-                                            <TableCell><Link to={'/detail-client?id=' + row.id}><Button variant='contained'>Détail</Button></Link></TableCell>
+                                            <TableCell>{row.solde}</TableCell>
+                                            <TableCell>{row.taux}</TableCell>
+                                            <TableCell><Link to={'/detail-compte?id=' + row.id}><Button variant='contained'>Détail</Button></Link></TableCell>
                                             <TableCell><Button type="submit" variant='contained' onClick={() => handleClickOpen(row)}>Modifier</Button></TableCell>
                                             <TableCell><Button type="submit" variant='contained' onClick={() => effacer(row.id)}>Supprimer</Button></TableCell>
-                                            <DialogClient/>
+                                            <DialogCompte/>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -111,4 +107,4 @@ function Client() {
         </>
     );
 }
-export default Client;
+export default Compte;

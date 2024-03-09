@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public class Client {
     @OneToMany(mappedBy = "client")
     @JsonManagedReference
     private List<Compte> comptes;
+    @ColumnDefault("0")
+    private Double decouvert;
 }
