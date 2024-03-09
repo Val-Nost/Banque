@@ -4,18 +4,21 @@ function DialogCompte(props) {
     const { onClose, open=false, id, solde, taux, comptes} = props;
     function handlePopUpSubmit(event)  {
         event.preventDefault();
-        fetch('api/compte/remplacer/' +  event.target.elements.id.value, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id: event.target.elements.id.value,
-                solde:  event.target.elements.solde.value,
-                taux:  event.target.elements.taux.value,
-                comptes:  comptes
+        if (event.target.elements.solde.value >= 0) {
+            fetch('api/compte/remplacer/' +  event.target.elements.id.value, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id: event.target.elements.id.value,
+                    solde:  event.target.elements.solde.value,
+                    taux:  event.target.elements.taux.value
+                })
             })
-        })
-            .then(response => response.json())
-        .then(() => {window.location.reload()});
+                .then(response => response.json())
+                .then(() => {window.location.reload()});
+        } else {
+            alert("Le solde ne peut pas être négatif")
+        }
     }
 
     return (

@@ -42,7 +42,8 @@ function DetailClient() {
                 beneficiaire: compteBeneficiaireSelected,
                 montant: montantVirement
             })
-        }).then(() => {window.location.reload()})
+        })
+            .then(() => {window.location.reload()})
     }
     function handleCompteEmmetteurChange(event) {
         setCompteEmetteurSelected(event.target.value)

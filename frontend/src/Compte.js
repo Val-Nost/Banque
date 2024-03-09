@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {
-    Button,
-    Grid,
-    Paper,
+    Button, FormControl,
+    Grid, InputLabel, MenuItem,
+    Paper, Select,
     Table,
     TableBody,
     TableCell,
@@ -17,14 +17,20 @@ import {Link} from "react-router-dom";
 
 function Compte() {
     const [comptes, setComptes] = useState([])
-    const [compteSelected, setCompteSelected] = useState({})
+    const [compteSelected, setCompteSelected] = useState('')
     const [open, setOpen] = useState(false)
+    const [clients, setClients] = useState([])
+    const [clientSelected, setClientSelected] = useState('')
 
 
     useEffect(() => {
         fetch('api/compte/lister')
             .then(response => response.json())
             .then(data => setComptes(data))
+        fetch('api/client/lister')
+            .then(response => response.json())
+            .then(data => setClients(data))
+
     }, [])
 
     // init();
@@ -37,16 +43,22 @@ function Compte() {
     };
 
     function handleCompteSubmit(event)  {
-        fetch('api/compte', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                nom: event.target.elements.solde.value,
-                prenom: event.target.elements.taux.value
-            })
-        })
+        fetch('api/client/lister/'+event.target.elements.client.value)
             .then(response => response.json())
-            .then(() => {window.location.reload()})
+            .then((client) => {
+                fetch('api/compte', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        solde: event.target.elements.solde.value,
+                        taux: event.target.elements.taux.value,
+                        client: client
+                    })
+                })
+                    .then(response => response.json())
+                    .then(() => {window.location.reload()})
+                }
+            )
         event.preventDefault();
     }
     function effacer(id) {
@@ -55,6 +67,9 @@ function Compte() {
         };
         fetch('api/compte/effacer/' + id, requestOptions)
             .then(() => {window.location.reload()});
+    }
+    function handleChangeClient(event) {
+        setClientSelected(event.target.value)
     }
     return (
         <>
@@ -72,6 +87,20 @@ function Compte() {
                         <form onSubmit={handleCompteSubmit}>
                             <TextField size="small" label="Solde" id="solde" name="solde" type="text" required/>
                             <TextField size="small" label="Taux" id="taux" name="taux" type="text" required/>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 200 }}>
+                                <InputLabel id="client">Client</InputLabel>
+                                <Select
+                                    required
+                                    name="client"
+                                    labelId="client"
+                                    label="Client"
+                                    onChange={handleChangeClient}
+                                    value={clientSelected}>
+                                    {clients != null ? clients.map((row) => (
+                                        <MenuItem key={row.id} value={row.id}>{row.nom + ' ' + row.prenom}</MenuItem>
+                                    )) : <MenuItem/>}
+                                </Select>
+                            </FormControl>
                             <Button variant='contained' type="submit">Créer</Button>
                         </form>
                     </Grid>

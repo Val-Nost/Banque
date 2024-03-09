@@ -81,8 +81,8 @@ public class WSCompteController {
                 logger.info(msgLog);
                 emetteur.setSolde(montantDebite);
                 beneficiaire.setSolde(beneficiaire.getSolde() + virementDto.getMontant());
-                compteService.save(emetteur);
-                compteService.save(beneficiaire);
+                emetteur = compteService.save(emetteur);
+                beneficiaire = compteService.save(beneficiaire);
                 return true;
             }
         } else {
