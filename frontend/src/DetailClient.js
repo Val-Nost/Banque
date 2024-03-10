@@ -43,7 +43,14 @@ function DetailClient() {
                 montant: montantVirement
             })
         })
-            .then(() => {window.location.reload()})
+            .then(response => response.json())
+            .then((data) => {
+                if (data) {
+                    window.location.reload()
+                } else {
+                    alert("Erreur, veuillez vérifier les montants et découverts de vos comptes")
+                }
+            })
     }
     function handleCompteEmmetteurChange(event) {
         setCompteEmetteurSelected(event.target.value)

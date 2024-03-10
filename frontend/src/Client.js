@@ -54,7 +54,14 @@ function Client() {
             method: 'DELETE'
         };
         fetch('api/client/effacer/' + id, requestOptions)
-            .then(() => {window.location.reload()});
+            .then(response => response.json())
+            .then((data) => {
+                if (data) {
+                    window.location.reload()
+                } else {
+                    alert("Impossible de supprimer ce client, veuillez d'abord supprimer tous ses comptes")
+                }
+            });
     }
     return (
         <>

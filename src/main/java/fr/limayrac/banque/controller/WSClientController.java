@@ -3,6 +3,7 @@ package fr.limayrac.banque.controller;
 import fr.limayrac.banque.model.Client;
 import fr.limayrac.banque.service.IClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +42,12 @@ public class WSClientController {
                 .orElseGet(() -> clientService.save(newClient));
     }
     @DeleteMapping("/effacer/{id}")
-    public void effacer(@PathVariable Integer id) {
-        clientService.delete(id);
+    public Boolean effacer(@PathVariable Integer id) {
+        try {
+            clientService.delete(id);
+            return true;
+        } catch (DataIntegrityViolationException e) {
+            return false;
+        }
     }
 }
